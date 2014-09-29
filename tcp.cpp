@@ -1,7 +1,39 @@
 #include "./tcp.h"
 
-namespace marusalib{
+namespace marusalib {
 namespace tcp {
+
+namespace utility {
+int create_socket(uint32_t ip, uint16_t port)
+{
+	int sock;
+
+	/* Create Socket */
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+#ifdef ___TCP_DEBUG___
+		fprintf(stderr, "TCPServer::TCPServer - ERROR, socket() didn't create socket.\n");
+#endif /* ___TCP_DEBUG___ */
+		return (-1);
+	}
+
+	struct sockaddr_int addr;
+	/* If addr isn't zero, perhaps error will occur at bind(). */
+	memset(&addr, 0, sizeof(addr));
+
+	/* Set address and port to socket. */
+	addr.sin_family			= PF_INET;
+	addr.sin_addr.s_addr	= ip;
+	addr.sin_port			= htons(port_no);
+	if (bind(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in)) < 0){
+#ifdef ___TCP_DEBUG___
+		fprintf(stderr, "TCPServer::TCPServer - ERROR, bind() didn't bind addr to socket.\n");
+#endif /* ___TCP_DEBUG___ */
+		return (-1);
+	}
+
+	return (sock);
+}
+}
 
 /**
  * Constructor that set receive port no to a given value.
@@ -9,28 +41,8 @@ namespace tcp {
  */
 TCPServer::TCPServer(int port_no)
 {
-	/* Create Socket */
-	if ((this->listen_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-#ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPServer::TCPServer - ERROR, socket() didn't create socket.\n");
-#endif /* ___TCP_DEBUG___ */
-		return;
-	}
-
-	/* If addr isn't zero, perhaps error will occur at bind(). */
-	memset(&server_addr, 0, sizeof(server_addr));
-
-	/* Set address and port to socket. */
-	this->server_addr.sin_family		= PF_INET;
-	this->server_addr.sin_addr.s_addr	= INADDR_ANY;
-	this->server_addr.sin_port		= htons(port_no);
-	if (bind(this->listen_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in)) < 0){
-#ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPServer::TCPServer - ERROR, bind() didn't bind addr to socket.\n");
-#endif /* ___TCP_DEBUG___ */
-		return;
-	}
-
+	this->port = port_no;
+	this->listen_sock = utility::create_socket(INADDR_ANY, port_no);
 	on_reply_resv_listener = new OnReplyReceiveListener();
 }
 

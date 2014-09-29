@@ -9,10 +9,14 @@
 #include <unistd.h>
 #include <pthread.h>
 
-namespace marusalib{
+#define ___TCP_DEBUG___
+
+namespace marusalib {
 namespace tcp {
 
-#define ___TCP_DEBUG___
+namespace utility {
+int create_socket(uint32_t ip, uint16_t port);
+}
 
 class TCPServer
 {
@@ -25,7 +29,7 @@ public:
 
 
 private:
-	struct sockaddr_in server_addr;
+	uint16_t port;
 	int listen_sock;
 	OnReplyReceiveListener *on_reply_resv_listener;
 
