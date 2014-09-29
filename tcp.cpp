@@ -16,15 +16,15 @@ int create_socket(uint32_t ip, uint16_t port)
 		return (-1);
 	}
 
-	struct sockaddr_int addr;
+	struct sockaddr_in addr;
 	/* If addr isn't zero, perhaps error will occur at bind(). */
 	memset(&addr, 0, sizeof(addr));
 
 	/* Set address and port to socket. */
 	addr.sin_family			= PF_INET;
 	addr.sin_addr.s_addr	= ip;
-	addr.sin_port			= htons(port_no);
-	if (bind(sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in)) < 0){
+	addr.sin_port			= htons(port);
+	if (bind(sock, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0){
 #ifdef ___TCP_DEBUG___
 		fprintf(stderr, "TCPServer::TCPServer - ERROR, bind() didn't bind addr to socket.\n");
 #endif /* ___TCP_DEBUG___ */
@@ -71,7 +71,7 @@ void TCPServer::start_listening(void)
 		return;
 	}
 #ifdef ___TCP_DEBUG___
-	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->server_addr.sin_port);
+	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->port);
 #endif /* ___TCP_DEBUG___ */
 
 	while (1){
