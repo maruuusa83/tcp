@@ -16,14 +16,11 @@ namespace tcp {
 
 namespace utility {
 int create_socket(uint32_t ip, uint16_t port);
+const int MAX_MESSAGE_SIZE = 10000;
 }
 
 class TCPServer
 {
-private:
-	struct _resv_context;
-	typedef struct _resv_context ResvContext;
-
 public:
 	class OnReplyReceiveListener;
 
@@ -31,28 +28,22 @@ public:
 private:
 	uint16_t port;
 	int listen_sock;
-	OnReplyReceiveListener *on_reply_resv_listener;
+	OnReplyReceiveListener *on_reply_recv_listener;
 
 	static void *recv_msg(void *resv_context);
-
-	struct _resv_context{ /* This struct will rename to ResvContext by typedef */
-		int sock;
-		OnReplyReceiveListener *listener;
-	};
 
 public:
 	TCPServer(int port_no);
 	~TCPServer();
 	void start_listening(void);
 	void set_on_reply_recv_listener(OnReplyReceiveListener *listener);
+	OnReplyReceiveListener *get_on_reply_recv_listener();
 
 	class OnReplyReceiveListener{
 	public:
-		virtual void onRecv(int sock_id, char *msg);
+		virtual void onRecv(TCPServer *context, char *msg);
 		virtual ~OnReplyReceiveListener();
 	};
-
-	static const int MAX_MESSAGE_SIZE = 10000;
 };
 
 }
