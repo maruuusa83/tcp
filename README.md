@@ -12,7 +12,7 @@ using marusalib::tcp::TCPServer;
 class Listener : public TCPServer::OnReplyReceiveListener
 {
 public:
-    void onResv(int sock_id, char *msg)
+    void onResv(TCPServer *context, char *msg)
     {
         /* If received new message, this function will called. */
     }

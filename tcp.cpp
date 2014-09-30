@@ -1,7 +1,39 @@
 #include "./tcp.h"
 
-namespace marusalib{
+namespace marusalib {
 namespace tcp {
+
+namespace utility {
+int create_socket(uint32_t ip, uint16_t port)
+{
+	int sock;
+
+	/* Create Socket */
+	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+#ifdef ___TCP_DEBUG___
+		fprintf(stderr, "TCPServer::TCPServer - ERROR, socket() didn't create socket.\n");
+#endif /* ___TCP_DEBUG___ */
+		return (-1);
+	}
+
+	struct sockaddr_in addr;
+	/* If addr isn't zero, perhaps error will occur at bind(). */
+	memset(&addr, 0, sizeof(addr));
+
+	/* Set address and port to socket. */
+	addr.sin_family			= PF_INET;
+	addr.sin_addr.s_addr	= ip;
+	addr.sin_port			= htons(port);
+	if (bind(sock, (struct sockaddr *)&addr, sizeof(struct sockaddr_in)) < 0){
+#ifdef ___TCP_DEBUG___
+		fprintf(stderr, "TCPServer::TCPServer - ERROR, bind() didn't bind addr to socket.\n");
+#endif /* ___TCP_DEBUG___ */
+		return (-1);
+	}
+
+	return (sock);
+}
+}
 
 /**
  * Constructor that set receive port no to a given value.
@@ -9,29 +41,9 @@ namespace tcp {
  */
 TCPServer::TCPServer(int port_no)
 {
-	/* Create Socket */
-	if ((this->listen_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
-#ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPServer::TCPServer - ERROR, socket() didn't create socket.\n");
-#endif /* ___TCP_DEBUG___ */
-		return;
-	}
-
-	/* If addr isn't zero, perhaps error will occur at bind(). */
-	memset(&server_addr, 0, sizeof(server_addr));
-
-	/* Set address and port to socket. */
-	this->server_addr.sin_family		= PF_INET;
-	this->server_addr.sin_addr.s_addr	= INADDR_ANY;
-	this->server_addr.sin_port		= htons(port_no);
-	if (bind(this->listen_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr_in)) < 0){
-#ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPServer::TCPServer - ERROR, bind() didn't bind addr to socket.\n");
-#endif /* ___TCP_DEBUG___ */
-		return;
-	}
-
-	on_reply_resv_listener = new OnReplyReceiveListener();
+	this->port = port_no;
+	this->listen_sock = utility::create_socket(INADDR_ANY, port_no);
+	on_reply_recv_listener = new OnReplyReceiveListener();
 }
 
 /**
@@ -39,7 +51,7 @@ TCPServer::TCPServer(int port_no)
  */
 TCPServer::~TCPServer()
 {
-	delete on_reply_resv_listener;
+	delete on_reply_recv_listener;
 }
 
 /**
@@ -59,7 +71,7 @@ void TCPServer::start_listening(void)
 		return;
 	}
 #ifdef ___TCP_DEBUG___
-	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->server_addr.sin_port);
+	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->port);
 #endif /* ___TCP_DEBUG___ */
 
 	while (1){
@@ -76,12 +88,8 @@ void TCPServer::start_listening(void)
 		}
 
 		/* Create thread */
-		ResvContext *context = new ResvContext;
-		context->sock = conn_sock;
-		context->listener = on_reply_resv_listener;
-
 		pthread_t worker;
-		if (pthread_create(&worker, NULL, this->recv_msg, (void *)context) != 0){
+		if (pthread_create(&worker, NULL, this->recv_msg, (void *)this) != 0){
 #ifdef ___TCP_DEBUG___
 			fprintf(stderr, "TCPServer::TCPServer - ERROR, accept() didn't accept client.\n");
 #endif /* ___TCP_DEBUG___ */
@@ -94,16 +102,16 @@ void TCPServer::start_listening(void)
 	close(this->listen_sock);
 }
 
-void *TCPServer::recv_msg(void *resv_context)
+void *TCPServer::recv_msg(void *recv_context)
 {
-	ResvContext *context = (ResvContext *)resv_context;
-	char buf[MAX_MESSAGE_SIZE + 1];
+	char buf[utility::MAX_MESSAGE_SIZE + 1];
 
-	int conn_sock = context->sock;
-	OnReplyReceiveListener *listener = context->listener;
+	TCPServer *context = (TCPServer *)recv_context;
+	int conn_sock = context->listen_sock;
+	OnReplyReceiveListener *listener = context->get_on_reply_recv_listener();
 
 	do {
-		int rsize = recv(conn_sock, buf, MAX_MESSAGE_SIZE, 0);
+		int rsize = recv(conn_sock, buf, utility::MAX_MESSAGE_SIZE, 0);
 
 		if (rsize == 0){
 #ifdef ___TCP_DEBUG___
@@ -118,7 +126,7 @@ void *TCPServer::recv_msg(void *resv_context)
 			return (NULL);
 		}
 		else {
-			listener->onRecv(conn_sock, buf);
+			listener->onRecv(context, buf);
 		}
 	} while (1);
 
@@ -136,15 +144,20 @@ void *TCPServer::recv_msg(void *resv_context)
 	return (NULL);
 }
 
-void TCPServer::set_on_reply_recv_listener(OnReplyReceiveListener *listener)
+void TCPServer::set_on_reply_recv_listener(TCPServer::OnReplyReceiveListener *listener)
 {
-	delete (this->on_reply_resv_listener);
+	delete (this->on_reply_recv_listener);
 
-	this->on_reply_resv_listener = listener;
+	this->on_reply_recv_listener = listener;
+}
+
+TCPServer::OnReplyReceiveListener *TCPServer::get_on_reply_recv_listener(void)
+{
+	return (this->on_reply_recv_listener);
 }
 
 
-void TCPServer::OnReplyReceiveListener::onRecv(int sock_id, char *msg)
+void TCPServer::OnReplyReceiveListener::onRecv(TCPServer *context, char *msg)
 {
 	/* nothing to do */
 }
