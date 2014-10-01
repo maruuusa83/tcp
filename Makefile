@@ -15,9 +15,9 @@
  # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 PROGRAM = tcp
-OBJS = TCPServer.o TCPUtilities.o
+OBJS = TCPClient.o TCPUtilities.o
 
-CFLAGS = -Wall -O0 -g
+CFLAGS = -Wall -O0 -g -pthread
 
 .SUFFIXES: .cpp .o
 
