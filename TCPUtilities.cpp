@@ -32,6 +32,25 @@ int create_socket(void)
 	return (sock);
 }
 
+int create_thread(TCPHost *host, int socket)
+{
+	/* Create thread */
+	RecvContext *context = new RecvContext();
+	context->host = host;
+	context->conn_sock = socket;
+
+	pthread_t worker;
+	if (pthread_create(&worker, NULL, recv_msg, (void *)context) != 0){
+#ifdef ___TCP_DEBUG___
+		fprintf(stderr, "utilities::create_thread - ERROR, didn't create new thread.\n");
+#endif /* ___TCP_DEBUG___ */
+		return (-1);
+	}
+	pthread_detach(worker);
+
+	return (0);
+}
+
 void *recv_msg(void *recv_context)
 {
 	char buf[utilities::MAX_MSG_SIZE + 1];

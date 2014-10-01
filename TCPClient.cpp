@@ -31,18 +31,7 @@ int TCPClient::est_conn(void)
 	}
 
 	/* Create thread */
-	RecvContext *context = new RecvContext();
-	context->host = this;
-	context->conn_sock = this->socket;
-
-	pthread_t worker;
-	if (pthread_create(&worker, NULL, utilities::recv_msg, (void *)context) != 0){
-#ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPClient::est_conn - ERROR, didn't create new thread.\n");
-#endif /* ___TCP_DEBUG___ */
-		return (-1);
-	}
-	pthread_detach(worker);
+	utilities::create_thread(this, this->socket);
 
 	return (0);
 }
