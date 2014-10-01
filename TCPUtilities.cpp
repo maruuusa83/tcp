@@ -45,13 +45,13 @@ void *recv_msg(void *recv_context)
 
 		if (rsize == 0){
 #ifdef ___TCP_DEBUG___
-			fprintf(stdout, "TCPServer::recv_msg - Disconnected client.\n");
+			fprintf(stdout, "utilities::recv_msg - Disconnected client.\n");
 #endif /* ___TCP_DEBUG___ */
 			break;
 		}
 		else if (rsize < 0){
 #ifdef ___TCP_DEBUG___
-			fprintf(stderr, "TCPServer::recv_msg - ERROR, recv\n");
+			fprintf(stderr, "utilities::recv_msg - ERROR, recv %d\n", rsize);
 #endif /* ___TCP_DEBUG___ */
 			return (NULL);
 		}
@@ -61,7 +61,7 @@ void *recv_msg(void *recv_context)
 	} while (1);
 
 #ifdef ___TCP_DEBUG___
-	fprintf(stdout, "TCPServer::recv_msg - Connection closed.\n");
+	fprintf(stdout, "utilities::recv_msg - Connection closed.\n");
 #endif /* ___TCP_DEBUG___ */
 
 	return (NULL);
