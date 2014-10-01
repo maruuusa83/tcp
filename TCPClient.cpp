@@ -25,7 +25,7 @@ int TCPClient::est_conn(void)
 	socklen_t len = sizeof(struct sockaddr_in);
 	if (connect((this->socket), (struct sockaddr *)&(this->addr), len) < 0){
 #ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPClient::connect - ERROR, connect() didn't connect to addr : %d.\n", this->addr.sin_addr.s_addr);
+		fprintf(stderr, "TCPClient::est_conn - ERROR, connect() didn't connect to addr : %d.\n", this->addr.sin_addr.s_addr);
 #endif /* ___TCP_DEBUG___ */
 		return (-1);
 	}
@@ -38,7 +38,7 @@ int TCPClient::est_conn(void)
 	pthread_t worker;
 	if (pthread_create(&worker, NULL, utilities::recv_msg, (void *)context) != 0){
 #ifdef ___TCP_DEBUG___
-		fprintf(stderr, "TCPClient::connect - ERROR, didn't create new thread.\n");
+		fprintf(stderr, "TCPClient::est_conn - ERROR, didn't create new thread.\n");
 #endif /* ___TCP_DEBUG___ */
 		return (-1);
 	}
