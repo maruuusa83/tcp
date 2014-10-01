@@ -53,6 +53,8 @@ public:
 	TCPHost(uint32_t ip, uint16_t port);
 	virtual ~TCPHost();
 
+	int send_msg(MESSAGE *msg);
+
 	int get_socket(void);
 	void set_on_reply_recv_listener(OnReplyRecvListener *listener);
 	OnReplyRecvListener *get_on_reply_recv_listener(void);
