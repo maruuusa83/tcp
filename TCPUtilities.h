@@ -19,23 +19,16 @@ namespace marusalib {
 namespace tcp {
 namespace utilities {
 
+/*** prototype ***/
+struct _recv_context;
+class OnReplyRecvListener;
+class TCPHost;
+
 /*** Declaration of Functions ***/
 void set_data2addr(struct sockaddr_in *addr, uint32_t ip, uint16_t port);
 int create_socket(void);
 
 /*** Definition of Structures/Classes ***/
-class TCPHost {
-protected:
-	struct sockaddr_in addr;
-	int socket;
-
-public:
-	TCPHost(uint32_t ip, uint16_t port);
-	virtual ~TCPHost();
-
-	int get_socket(void);
-};
-
 typedef struct _recv_context {
 	TCPHost *host;
 	int conn_sock;
@@ -47,8 +40,25 @@ public:
 	virtual ~OnReplyRecvListener();
 };
 
+class TCPHost {
+protected:
+	struct sockaddr_in addr;
+	int socket;
+
+	OnReplyRecvListener *recv_listener;
+
+public:
+	TCPHost(uint32_t ip, uint16_t port);
+	virtual ~TCPHost();
+
+	int get_socket(void);
+	void set_on_reply_recv_listener(OnReplyRecvListener *listener);
+	OnReplyRecvListener *get_on_reply_recv_listener(void);
+};
+
 /*** Definition of Const Values ***/
 const int MAX_MSG_SIZE = 10000;
+
 
 } // namespace utilities
 } // namespace tcp
