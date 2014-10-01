@@ -38,17 +38,31 @@ void *TCPServer::recv_msg(void *recv_context)
 	return (NULL);
 }
 
+/**
+ * Constructor that set receive port no to a given value.
+ * \param part_no is a number of message receive port.
+ */
 TCPServer::TCPServer(uint16_t port_no)
 {
 	host_init(INADDR_ANY, port_no);
 	recv_listener = new OnReplyRecvListener();
 }
 
+/**
+ * Destructor
+ */
 TCPServer::~TCPServer()
 {
 	delete (recv_listener);
 }
 
+/**
+ * Start listening and create connection thread.
+ * <pre>
+ * After you call this method, TCPServer will start listening socket.
+ * This method create new thread if new client is attempt connecting.
+ * </pre>
+ */
 void TCPServer::start_listening(void)
 {
 	if (bind(this->socket, (struct sockaddr *)&(this->addr), sizeof(struct sockaddr_in)) < 0){
@@ -65,7 +79,7 @@ void TCPServer::start_listening(void)
 		return;
 	}
 #ifdef ___TCP_DEBUG___
-	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->port);
+	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", ntohs(this->addr.sin_port));
 #endif /* ___TCP_DEBUG___ */
 
 	while (1){
@@ -103,6 +117,11 @@ void TCPServer::start_listening(void)
 void TCPServer::set_on_reply_recv_listener(OnReplyRecvListener *listener)
 {
 	this->recv_listener = listener;
+}
+
+OnReplyRecvListener *TCPServer::get_on_reply_recv_listener(void)
+{
+	return (this->recv_listener);
 }
 
 } // namespace tcp

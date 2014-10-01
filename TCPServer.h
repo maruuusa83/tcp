@@ -1,6 +1,10 @@
 #ifndef ___TCP_SERVER_H___
 #define ___TCP_SERVER_H___
 
+#ifdef ___TCP_DEBUG___
+#include <stdio.h>
+#endif /* ___TCP_DEBUG___ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
