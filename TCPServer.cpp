@@ -44,7 +44,7 @@ void *TCPServer::recv_msg(void *recv_context)
  */
 TCPServer::TCPServer(uint16_t port_no) : TCPHost(INADDR_ANY, port_no)
 {
-	recv_listener = new OnReplyRecvListener();
+	/* nothing to do */
 }
 
 /**
@@ -52,7 +52,7 @@ TCPServer::TCPServer(uint16_t port_no) : TCPHost(INADDR_ANY, port_no)
  */
 TCPServer::~TCPServer()
 {
-	delete (recv_listener);
+	/* nothing to do */
 }
 
 /**
@@ -113,15 +113,6 @@ void TCPServer::start_listening(void)
 	close(this->socket);
 }
 
-void TCPServer::set_on_reply_recv_listener(OnReplyRecvListener *listener)
-{
-	this->recv_listener = listener;
-}
-
-OnReplyRecvListener *TCPServer::get_on_reply_recv_listener(void)
-{
-	return (this->recv_listener);
-}
 
 } // namespace tcp
 } // namespace marusalib

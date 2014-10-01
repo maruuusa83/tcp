@@ -37,9 +37,6 @@ public:
 	~TCPServer();
 
 	void start_listening(void);
-
-	void set_on_reply_recv_listener(OnReplyRecvListener *listener);
-	OnReplyRecvListener *get_on_reply_recv_listener(void);
 };
  
 } // namespace tcp
