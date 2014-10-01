@@ -1,20 +1,19 @@
 #ifndef ___TCP_SERVER_H___
 #define ___TCP_SERVER_H___
 
-#ifdef ___TCP_DEBUG___
-#include <stdio.h>
-#endif /* ___TCP_DEBUG___ */
-
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <pthread.h>
 
 #include "./TCPSettings.h"
 #include "./TCPUtilities.h"
+
+#ifdef ___TCP_DEBUG___
+#include <stdio.h>
+#endif /* ___TCP_DEBUG___ */
 
 namespace marusalib {
 namespace tcp {
