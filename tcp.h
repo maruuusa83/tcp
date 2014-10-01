@@ -46,6 +46,16 @@ public:
 	};
 };
 
+class TCPClient
+{
+private:
+	uint16_t port;
+	uint32_t ip;
+
+	TCPClient(uint32_t ip, uint16_t port);
+	virtual ~TCPServer();
+}
+
 }
 }
 

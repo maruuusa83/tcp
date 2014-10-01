@@ -4,7 +4,7 @@ namespace marusalib {
 namespace tcp {
 
 namespace utility {
-int create_socket(uint32_t ip, uint16_t port)
+int create_socket()
 {
 	int sock;
 
@@ -16,6 +16,11 @@ int create_socket(uint32_t ip, uint16_t port)
 		return (-1);
 	}
 
+	return (sock);
+}
+
+int bind_addr(uint32_t ip, uint16_t port)
+{
 	struct sockaddr_in addr;
 	/* If addr isn't zero, perhaps error will occur at bind(). */
 	memset(&addr, 0, sizeof(addr));
