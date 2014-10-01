@@ -35,18 +35,29 @@ int create_socket(void)
 TCPHost::TCPHost(uint32_t ip, uint16_t port)
 {
 	set_data2addr(&(this->addr), ip, port);
-
 	this->socket = create_socket();
+
+	recv_listener = new OnReplyRecvListener();
 }
 
 TCPHost::~TCPHost()
 {
-	/* nothing to do */
+	delete (recv_listener);
 }
 
 int TCPHost::get_socket(void)
 {
 	return (this->socket);
+}
+
+void TCPHost::set_on_reply_recv_listener(OnReplyRecvListener *listener)
+{
+	this->recv_listener = listener;
+}
+
+OnReplyRecvListener *TCPHost::get_on_reply_recv_listener(void)
+{
+	return (this->recv_listener);
 }
 
 void OnReplyRecvListener::onRecv(RecvContext *context, MESSAGE *msg)
