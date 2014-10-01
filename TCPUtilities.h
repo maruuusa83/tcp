@@ -30,7 +30,7 @@ protected:
 	int socket;
 
 public:
-	void host_init(uint32_t ip, uint16_t port);
+	TCPHost(uint32_t ip, uint16_t port);
 	virtual ~TCPHost();
 
 	int get_socket(void);

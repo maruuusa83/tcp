@@ -42,9 +42,8 @@ void *TCPServer::recv_msg(void *recv_context)
  * Constructor that set receive port no to a given value.
  * \param part_no is a number of message receive port.
  */
-TCPServer::TCPServer(uint16_t port_no)
+TCPServer::TCPServer(uint16_t port_no) : TCPHost(INADDR_ANY, port_no)
 {
-	host_init(INADDR_ANY, port_no);
 	recv_listener = new OnReplyRecvListener();
 }
 
