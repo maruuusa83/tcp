@@ -27,11 +27,6 @@ class TCPServer : public TCPHost
 {
 	typedef TCPHost Base;
 
-private:
-	OnReplyRecvListener *recv_listener;
-
-	static void *recv_msg(void *recv_context);
-
 public:
 	TCPServer(uint16_t port_no);
 	~TCPServer();
