@@ -32,7 +32,7 @@ int create_socket(void)
 	return (sock);
 }
 
-void TCPHost::host_init(uint32_t ip, uint16_t port)
+TCPHost::TCPHost(uint32_t ip, uint16_t port)
 {
 	set_data2addr(&(this->addr), ip, port);
 
