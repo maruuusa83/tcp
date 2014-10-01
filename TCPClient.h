@@ -1,5 +1,5 @@
-#ifndef ___TCP_SERVER_H___
-#define ___TCP_SERVER_H___
+#ifndef ___TCP_CLIENT_H___
+#define ___TCP_CLIENT_H___
 
 #ifdef ___TCP_DEBUG___
 #include <stdio.h>
@@ -23,19 +23,20 @@ using utilities::TCPHost;
 using utilities::OnReplyRecvListener;
 using utilities::RecvContext;
 
-class TCPServer : public TCPHost
+class TCPClient : public TCPHost
 {
 	typedef TCPHost Base;
 
 public:
-	TCPServer(uint16_t port_no);
-	~TCPServer();
+	TCPClient(uint32_t ip, uint16_t port_no);
+	~TCPClient();
 
-	void start_listening(void);
+	int est_conn(void);
 };
  
 } // namespace tcp
 } // namespace marusalib
 
-#endif /* ___TCP_SERVER_H___ */
+#endif /* ___TCP_CLIENT_H___ */
+
 

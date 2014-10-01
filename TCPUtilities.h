@@ -27,6 +27,7 @@ class TCPHost;
 /*** Declaration of Functions ***/
 void set_data2addr(struct sockaddr_in *addr, uint32_t ip, uint16_t port);
 int create_socket(void);
+void *recv_msg(void *recv_context);
 
 /*** Definition of Structures/Classes ***/
 typedef struct _recv_context {

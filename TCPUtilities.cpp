@@ -32,6 +32,41 @@ int create_socket(void)
 	return (sock);
 }
 
+void *recv_msg(void *recv_context)
+{
+	char buf[utilities::MAX_MSG_SIZE + 1];
+
+	RecvContext *context = (RecvContext *)recv_context;
+	int socket = context->host->get_socket();
+	OnReplyRecvListener *listener = context->host->get_on_reply_recv_listener();
+	
+	do {
+		int rsize = recv(socket, buf, utilities::MAX_MSG_SIZE, 0);
+
+		if (rsize == 0){
+#ifdef ___TCP_DEBUG___
+			fprintf(stdout, "TCPServer::recv_msg - Disconnected client.\n");
+#endif /* ___TCP_DEBUG___ */
+			break;
+		}
+		else if (rsize < 0){
+#ifdef ___TCP_DEBUG___
+			fprintf(stderr, "TCPServer::recv_msg - ERROR, recv\n");
+#endif /* ___TCP_DEBUG___ */
+			return (NULL);
+		}
+		else {
+			listener->onRecv(context, buf);
+		}
+	} while (1);
+
+#ifdef ___TCP_DEBUG___
+	fprintf(stdout, "TCPServer::recv_msg - Connection closed.\n");
+#endif /* ___TCP_DEBUG___ */
+
+	return (NULL);
+}
+
 TCPHost::TCPHost(uint32_t ip, uint16_t port)
 {
 	set_data2addr(&(this->addr), ip, port);
