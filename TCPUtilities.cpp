@@ -99,6 +99,13 @@ TCPHost::~TCPHost()
 	delete (recv_listener);
 }
 
+int TCPHost::send_msg(MESSAGE *msg)
+{
+	write(this->socket, msg, MAX_MSG_SIZE);
+
+	return (0);
+}
+
 int TCPHost::get_socket(void)
 {
 	return (this->socket);
