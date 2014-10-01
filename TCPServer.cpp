@@ -55,7 +55,7 @@ void TCPServer::start_listening(void)
 
 		if ((conn_sock = accept(this->socket, (struct sockaddr *)&client_addr, &len)) < 0){
 #ifdef ___TCP_DEBUG___
-			fprintf(stderr, "TCPServer::TCPServer - ERROR, accept() didn't accept client.\n");
+			fprintf(stderr, "TCPServer::start_listening - ERROR, accept() didn't accept client.\n");
 #endif /* ___TCP_DEBUG___ */
 			return;
 		}
@@ -68,7 +68,7 @@ void TCPServer::start_listening(void)
 		pthread_t worker;
 		if (pthread_create(&worker, NULL, utilities::recv_msg, (void *)context) != 0){
 #ifdef ___TCP_DEBUG___
-			fprintf(stderr, "TCPServer::TCPServer - ERROR, accept() didn't accept client.\n");
+			fprintf(stderr, "TCPServer::start_listening - ERROR, didn't create new thread.\n");
 #endif /* ___TCP_DEBUG___ */
 			return;
 		}
