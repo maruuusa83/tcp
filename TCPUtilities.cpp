@@ -37,7 +37,7 @@ void *recv_msg(void *recv_context)
 	char buf[utilities::MAX_MSG_SIZE + 1];
 
 	RecvContext *context = (RecvContext *)recv_context;
-	int socket = context->host->get_socket();
+	int socket = context->conn_sock;
 	OnReplyRecvListener *listener = context->host->get_on_reply_recv_listener();
 	
 	do {
