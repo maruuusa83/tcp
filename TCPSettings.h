@@ -1,6 +1,8 @@
 #ifndef ___TCP_SETTINGS_H___
 #define ___TCP_SETTINGS_H___
 
+#define ___TCP_DEBUG___
+
 namespace marusalib {
 namespace tcp {
 

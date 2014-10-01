@@ -79,7 +79,7 @@ void TCPServer::start_listening(void)
 		return;
 	}
 #ifdef ___TCP_DEBUG___
-	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", this->port);
+	fprintf(stdout, "TCPServer::start_listening - Start Listening Port : %d...\n", ntohs(this->addr.sin_port));
 #endif /* ___TCP_DEBUG___ */
 
 	while (1){
@@ -117,6 +117,11 @@ void TCPServer::start_listening(void)
 void TCPServer::set_on_reply_recv_listener(OnReplyRecvListener *listener)
 {
 	this->recv_listener = listener;
+}
+
+OnReplyRecvListener *TCPServer::get_on_reply_recv_listener(void)
+{
+	return (this->recv_listener);
 }
 
 } // namespace tcp

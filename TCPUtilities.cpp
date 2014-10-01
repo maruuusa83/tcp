@@ -4,12 +4,6 @@ namespace marusalib {
 namespace tcp {
 namespace utilities {
 
-void TCPHost::host_init(uint32_t ip, uint16_t port)
-{
-	set_data2addr(&(this->addr), ip, port);
-
-	this->socket = create_socket();
-}
 
 void set_data2addr(struct sockaddr_in *addr, uint32_t ip, uint16_t port)
 {
@@ -38,7 +32,35 @@ int create_socket(void)
 	return (sock);
 }
 
+void TCPHost::host_init(uint32_t ip, uint16_t port)
+{
+	set_data2addr(&(this->addr), ip, port);
+
+	this->socket = create_socket();
+}
+
+TCPHost::~TCPHost()
+{
+	/* nothing to do */
+}
+
+int TCPHost::get_socket(void)
+{
+	return (this->socket);
+}
+
+void OnReplyRecvListener::onRecv(RecvContext *context, MESSAGE *msg)
+{
+	/* nothing to do */
+}
+
+OnReplyRecvListener::~OnReplyRecvListener()
+{
+	/* nothing to do */
+}
+
 
 } // namespace utilities
 } // namespace tcp
 } // namespace marusalib
+
