@@ -11,6 +11,8 @@ This library has two classes : TCPServer and TCPClient.
 
 using marusalib::tcp::TCPServer;
 using marusalib::tcp::utilities::RecvContext;
+using marusalib::tcp::utilities::OnReplyReceiveListener;
+using marusalib::tcp::utilities::send_msg;
 using marusalib::tcp::MESSAGE;
 
 class Listener : public TCPServer::OnReplyReceiveListener
@@ -19,8 +21,8 @@ public:
     void onResv(RecvContext *context, MESSAGE *msg)
     {
         /* If received new message, this function will called. */
-        TCPHost *host = context->host;
-        host->send_msg(msg);
+        printf("recv : %s\n", msg);
+        send_msg(context->conn_sock, msg);
     }
 }
 
@@ -28,7 +30,7 @@ int main(void){
     TCPServer *sv = new TCPServer(1234);
 
     Listener *listener = new Listener();
-    sv->set_on_reply_recv_listener(listener);
+    sv->set_on_reply_recv_listener((OnReplyReceiveListener *)listener);
 
     sv->start_listening();
 }
@@ -54,12 +56,17 @@ public:
 
 int main(void){
     char ip_str[] = "127.0.0.1";
-    struct hostent *hp = gethostbyname(ip_str);
-    
-    TCPClient *client = new TCPClient(((struct sockaddr_in *)hp->h_addr).s_addr, 1234);
+    int port_no = 1234;
+
+    TCPClient *client = new TCPClient(inet_addr(ip_str), port_no);
+
+    Listener *listener = new Listener();
+    client->set_on_reply_recv_listener((OnReplyRecvListener *)listener);
 
     client->est_conn();
     client->send_msg("Hello, World!");
+
+    while (1);
 }
 ```
 
