@@ -86,6 +86,13 @@ void *recv_msg(void *recv_context)
 	return (NULL);
 }
 
+int send_msg(int socket, MESSAGE *msg)
+{
+	write(socket, msg, MAX_MSG_SIZE);
+
+	return (0);
+}
+
 TCPHost::TCPHost(uint32_t ip, uint16_t port)
 {
 	set_data2addr(&(this->addr), ip, port);
@@ -97,13 +104,6 @@ TCPHost::TCPHost(uint32_t ip, uint16_t port)
 TCPHost::~TCPHost()
 {
 	delete (recv_listener);
-}
-
-int TCPHost::send_msg(MESSAGE *msg)
-{
-	write(this->socket, msg, MAX_MSG_SIZE);
-
-	return (0);
 }
 
 int TCPHost::get_socket(void)

@@ -31,6 +31,7 @@ public:
 	~TCPClient();
 
 	int est_conn(void);
+	int send_msg(MESSAGE *msg);
 };
  
 } // namespace tcp
