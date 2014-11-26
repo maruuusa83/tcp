@@ -29,6 +29,7 @@ void set_data2addr(struct sockaddr_in *addr, uint32_t ip, uint16_t port);
 int create_socket(void);
 int create_thread(TCPHost *host, int socket);
 void *recv_msg(void *recv_context);
+int send_msg(MESSAGE *msg);
 
 /*** Definition of Structures/Classes ***/
 typedef struct _recv_context {
@@ -52,8 +53,6 @@ protected:
 public:
 	TCPHost(uint32_t ip, uint16_t port);
 	virtual ~TCPHost();
-
-	int send_msg(MESSAGE *msg);
 
 	int get_socket(void);
 	void set_on_reply_recv_listener(OnReplyRecvListener *listener);

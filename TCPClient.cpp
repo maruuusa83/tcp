@@ -36,6 +36,13 @@ int TCPClient::est_conn(void)
 	return (0);
 }
 
+int TCPClient::send_msg(MESSAGE *msg)
+{
+	utilities::send_msg(this->socket, msg);
+
+	return (0);
+}
+
 
 } // namespace tcp
 } // namespace marusalib
