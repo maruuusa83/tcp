@@ -55,13 +55,17 @@ OBJS = $(SRC:.cpp=.o)
 #-------------------------------------------------------------------
 # primary target
 .PHONY: all
-all: depend gen_obj gen_list allobj.lst
+all: depend gen_obj gen_list make_subdir allobj.lst
 
 .PHONY: gen_obj
 gen_obj: $(OBJS)
 .cpp.o:
 	$(CC) $(CFLAGS) -c $<
 
+
+.PHONY: make_subdir
+make_subdir:
+	-@ for i in $(DIRS); do make -C ./$$i; done
 
 # delete files target
 .PHONY: clean
