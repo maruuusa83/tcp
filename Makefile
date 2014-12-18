@@ -38,11 +38,12 @@ CC = g++
 #-------------------------------------------------------------------
 # Compile Option
 #-------------------------------------------------------------------
-CFLAGS = -Wall -O0 -g
+CFLAGS = -Wall -O0 -g -pthread
 
 #-------------------------------------------------------------------
 # Definition
 #-------------------------------------------------------------------
+DIRS = $(shell ls -F |grep / |sed -e "s/\///g")
 SRC  = $(shell ls *.cpp)
 OBJS = $(SRC:.cpp=.o)
 
@@ -54,7 +55,7 @@ OBJS = $(SRC:.cpp=.o)
 #-------------------------------------------------------------------
 # primary target
 .PHONY: all
-all: depend gen_obj gen_list
+all: depend gen_obj gen_list allobj.lst
 
 .PHONY: gen_obj
 gen_obj: $(OBJS)
@@ -65,8 +66,9 @@ gen_obj: $(OBJS)
 # delete files target
 .PHONY: clean
 clean:
+	-@ for i in $(DIRS); do make -C ./$$i clean; done
 	$(RM) $(PROGRAM) $(OBJS)
-	$(RM) depend.inc
+	$(RM) depend.inc objs.lst allobj.lst
 
 
 # header files
@@ -78,6 +80,12 @@ depend: $(OBJS:.o=.cpp)
 # generated files
 .PHONY: gen_list
 gen_list:
-	-@ ls *.o > objs.inc
+	-@ find `pwd` -maxdepth 1 -mindepth 1 |grep \\.o > objs.lst
+
+allobj.lst:
+	-@ $(RM) allobj.lst
+	-@ cat ./objs.lst >> ./allobj.lst
+	-@ for i in $(DIRS); do cat ./$$i/allobj.lst >> ./allobj.lst; done
+	-@ echo generated allobj.lst
 
 -include depend.inc
