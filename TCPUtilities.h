@@ -29,7 +29,7 @@ void set_data2addr(struct sockaddr_in *addr, uint32_t ip, uint16_t port);
 int create_socket(void);
 int create_thread(TCPHost *host, int socket);
 void *recv_msg(void *recv_context);
-int send_msg(int socket, MESSAGE *msg, const unsigned int &msg_size);
+int send_msg(int socket, MESSAGE *msg, const unsigned int &size_msg);
 
 /*** Definition of Structures/Classes ***/
 typedef struct _recv_context {

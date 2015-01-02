@@ -39,9 +39,9 @@ int TCPClient::est_conn(void)
 	return (0);
 }
 
-int TCPClient::send_msg(MESSAGE *msg)
+int TCPClient::send_msg(MESSAGE *msg, const unsigned int &size_msg)
 {
-	utilities::send_msg(this->socket, msg);
+	utilities::send_msg(this->socket, msg, size_msg);
 
 	return (0);
 }

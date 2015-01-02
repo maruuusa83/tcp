@@ -32,7 +32,7 @@ public:
 	~TCPClient();
 
 	int est_conn(void);
-	int send_msg(MESSAGE *msg);
+	int send_msg(MESSAGE *msg, const unsigned int &size_msg);
 };
  
 } // namespace tcp
