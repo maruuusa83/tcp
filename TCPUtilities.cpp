@@ -86,9 +86,9 @@ void *recv_msg(void *recv_context)
 	return (NULL);
 }
 
-int send_msg(int socket, MESSAGE *msg)
+int send_msg(int socket, MESSAGE *msg, const unsigned int &size_msg)
 {
-	write(socket, msg, MAX_MSG_SIZE);
+	write(socket, msg, size_msg);
 
 	return (0);
 }

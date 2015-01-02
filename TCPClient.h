@@ -6,7 +6,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <unistd.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 
 #include "./TCPSettings.h"
 #include "./TCPUtilities.h"
@@ -31,7 +32,7 @@ public:
 	~TCPClient();
 
 	int est_conn(void);
-	int send_msg(MESSAGE *msg);
+	int send_msg(MESSAGE *msg, const unsigned int &size_msg);
 };
  
 } // namespace tcp
