@@ -23,12 +23,15 @@ TCPClient::~TCPClient()
 int TCPClient::est_conn(void)
 {
 	socklen_t len = sizeof(struct sockaddr_in);
+
+	fprintf(stderr, "TCPClient::est_conn - try to connect\n");
 	if (connect((this->socket), (struct sockaddr *)&(this->addr), len) < 0){
 #ifdef ___TCP_DEBUG___
 		fprintf(stderr, "TCPClient::est_conn - ERROR, connect() didn't connect to addr : %d.\n", this->addr.sin_addr.s_addr);
 #endif /* ___TCP_DEBUG___ */
 		return (-1);
-	}
+	}	
+	fprintf(stderr, "TCPClient::est_conn - connected\n");
 
 	/* Create thread */
 	utilities::create_thread(this, this->socket);

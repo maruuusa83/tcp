@@ -36,6 +36,9 @@ void TCPServer::start_listening(void)
 #endif /* ___TCP_DEBUG___ */
 		return;
 	}
+#ifdef ___TCP_DEBUG___
+	fprintf(stdout, "TCPServer::start_listening - Address was binded to socket.\n");
+#endif /* ___TCP_DEBUG___ */
 
 	if (listen(this->socket, SOMAXCONN) < 0){
 #ifdef ___TCP_DEBUG___
@@ -59,6 +62,9 @@ void TCPServer::start_listening(void)
 #endif /* ___TCP_DEBUG___ */
 			return;
 		}
+#ifdef ___TCP_DEBUG___
+		fprintf(stdout, "TCPServer::start_listening - accepted new connection.\n");
+#endif /* ___TCP_DEBUG___ */
 
 		/* Create thread */
 		utilities::create_thread(this, conn_sock);
