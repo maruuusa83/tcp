@@ -60,7 +60,7 @@ public:
 };
 
 /*** Definition of Const Values ***/
-const int MAX_MSG_SIZE = 10000;
+const int MAX_MSG_SIZE = 1000000;
 
 
 } // namespace utilities
